@@ -1,0 +1,512 @@
+randomf3
+summary(randomf3)
+plot(varImp(randomf3), main = "Random Forest Variable Importance")
+plot(varImp(randomf3$finalModel), main = "Random Forest Variable Importance")
+plot(randomf3, main = "Random Forest")
+plot(randomf3, main = "Random Forest")
+test_pred_randomf3 <- predict(randomf3, newdata = X.testData)
+test_pred_randomf3
+res.randomf3 <- confusionMatrix(test_pred_randomf3, Y.testData)
+res.randomf3
+print_confusionm(res.randomf3, main = "Confusion Matrix: Random Forest 3",
+labels = c("Healthy", "Non-Healthy"))
+# Let's check the probabilities
+test_pred_randomf3_prob <- predict(randomf3, newdata = X.testData, type ="prob")[2]
+AUC$RF <- roc(as.numeric(Y.testData),as.numeric(as.matrix((test_pred_randomf3_prob))))$auc
+Accuracy$RF <- res.randomf3$overall['Accuracy']
+View(heart.data)
+# Chunk 1
+# Related with the Report
+library(knitr)
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(warnings = FALSE)
+knitr::opts_chunk$set(error = FALSE)
+knitr::opts_chunk$set(fig.height = 4)
+knitr::opts_chunk$set(fig.width = 15)
+knitr::opts_chunk$set(fig.align = 'center')
+options(knitr.table.format = "latex")
+options(digits=4)
+options(knitr.kable.NA = " ")
+opts_knit$set(kable.force.latex = TRUE)
+# Chunk 2
+############################################
+############################################ 1. VISUALIZATION ###################################
+############################################
+# Chunk 3
+### 1.1 Calling Neccesary Libraries
+l_packages = c("stats", "pls", "factoextra", "NbClust","ggplot2", "ggpubr","gridExtra",
+"fastICA", "plot3D", "caret", "randomForest","bst","pROC",
+"knitr","kableExtra","formatR", "xtable") # used to create the Report (knitr)
+for(p in l_packages){
+if (!require(p,character.only = TRUE)) install.packages(p)
+library(p,character.only = TRUE)
+}
+# Chunk 4
+### 1.2 Setting Up the Directory and Variables for Reproducibility
+# Student and Assigment Information Variables
+Student.Number <- "101066270"
+AS <- "FINAL"
+Student.info <- paste(Student.Number, AS, sep="-")
+# Folder Variables
+drive="C:"
+path.upto <- paste("Users", "Enrique","Documents",
+"Carleton", "Winter 2018", "STAT5703 Data Mining I", sep="/" )
+code.dir <- paste(drive, path.upto, Student.info, "Code", sep="/")
+data.dir <- paste(drive, path.upto, Student.info, "Data", sep="/")
+work.dir <- paste(drive, path.upto, Student.info, "Work", sep="/")
+report.dir <- paste(drive, path.upto, Student.info, "Report", sep="/")
+setwd(work.dir)
+getwd()
+# For reproducibility
+set.seed(12345)
+# Chunk 5
+## 1.3 Calling Neccesary Functions
+source(paste(code.dir, paste(Student.info, "functions.r", sep=" "), sep="/"))
+lsf.str()
+# Chunk 6
+## 1.4 Loading the Data
+data.file <- paste(data.dir, "clev.csv", sep="/")
+heart.data<-read.csv(data.file, header=TRUE)
+heart.data$Ca <- gsub("?",NA,heart.data$Ca, fixed = TRUE)
+heart.data$Ca<-as.numeric(heart.data$Ca)
+heart.data$Thal<-gsub("?",NA,heart.data$Thal, fixed = TRUE)
+heart.data$Thal<-as.numeric(heart.data$Thal)
+heart.data<-as.data.frame(heart.data)
+summary(heart.data)
+# Chunk 7
+## 1.5 Clean the Data
+# We can notice 6 NA's on variables "Ca" and "Thal", let's see those rows
+dim(heart.data)
+(heart.data.na <- subset(heart.data,(is.na(heart.data["Ca"]) | is.na(heart.data["Thal"]))))
+# Number of rows with NAs values
+nrow(heart.data.na)
+# Percentage
+(nrow(heart.data.na)/nrow(heart.data) * 100 )
+# Because is only 2% I suggest to remove those rows
+heart.data <- subset(heart.data, !(is.na(heart.data["Ca"]) | is.na(heart.data["Thal"])))
+#Check the new data
+summary(heart.data)
+str(heart.data)
+dim(heart.data)
+# Chunk 8
+## 1.6 Some Plots
+n.var <- length(heart.data)
+pairs(heart.data[,1:(n.var-1)], upper.panel=panel.cor, diag.panel=panel.hist, main = "Scaterplot Matrix")
+print_kable(var(heart.data[,1:(n.var-1)]), latex_options = 1)
+# Chunk 9
+## 1.7 Create a New Variable (Disease)
+# This variable will be used in the analysis
+heart.data$Disease <- ifelse((heart.data$Num != 0),1,0)
+heart.data$Disease <- factor(heart.data$Disease)
+str(heart.data$Disease)
+## 1.8 Create New Dataset with Factor Variables
+heart.factor <- heart.data
+heart.factor$Age <- factor(heart.factor$Age)
+heart.factor$Sex <- factor(heart.factor$Sex)
+heart.factor$CP <- factor(heart.factor$CP)
+heart.factor$Fbs <- factor(heart.factor$Fbs)
+heart.factor$Restecg <- factor(heart.factor$Restecg)
+heart.factor$Exang <- factor(heart.factor$Exang)
+heart.factor$Slope <- factor(heart.factor$Slope)
+heart.factor$Ca <- factor(heart.factor$Ca)
+heart.factor$Thal <- factor(heart.factor$Thal)
+heart.factor$Num <- factor(heart.factor$Num)
+# Check the new Data
+summary(heart.factor)
+str(heart.factor)
+dim(heart.factor)
+levels(heart.data.plot$Disease) <- c("healthy", "non-healthy")
+# Plot colored by Disease
+pairs(heart.data.plot[,1:(n.var-1)],
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+## 1.9 Create New Dataset with Factor Variables
+heart.factor.names <- heart.factor
+levels(heart.factor.names$Sex) <- c("female", "male")
+levels(heart.factor.names$CP) <- c("typical angina","atypical angina",
+"non-angina","asymtomatic angina")
+levels(heart.factor.names$Fbs) <- c("< 120 mg/dl", "> 120 mg/dl")
+levels(heart.factor.names$Restecg) <- c("Normal", "ST-T wave abnorm",
+"left ventr. hypertrophy")
+levels(heart.factor.names$Exang) <- c("No", "Yes")
+levels(heart.factor.names$Slope) <- c("Upsloping", "Flat", "Downsloping")
+levels(heart.factor.names$Thal) <- c("Normal", "Fixed Defect",
+"Reversible Defect")
+levels(heart.factor.names$Disease) <- c("Healthy", "Non-healthy")
+# Check the new Data
+summary(heart.factor.names)
+str(heart.factor.names)
+dim(heart.factor.names)
+## 1.9 Create New Dataset with Factor Variables
+heart.factor.names <- heart.factor
+levels(heart.factor.names$Sex) <- c("Female", "Male")
+levels(heart.factor.names$CP) <- c("Typical angina","Atypical angina",
+"Non-anginal pain","Asymptomatic")
+levels(heart.factor.names$Fbs) <- c("< 120 mg/dl", "> 120 mg/dl")
+levels(heart.factor.names$Restecg) <- c("Normal", "Having ST-T wave abnormality",
+"Showing left ventricular hypertrophy")
+levels(heart.factor.names$Exang) <- c("No", "Yes")
+levels(heart.factor.names$Slope) <- c("Upsloping", "Flat", "Downsloping")
+levels(heart.factor.names$Thal) <- c("Normal", "Fixed Defect",
+"Reversible Defect")
+levels(heart.factor.names$Disease) <- c("Healthy", "Non-healthy")
+# Check the new Data
+summary(heart.factor.names)
+str(heart.factor.names)
+dim(heart.factor.names)
+pairs(heart.type.names[,1:(n.var-1)],
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.type.names[,1:(n.var-1)],
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+heart.factor.names
+pairs(heart.factor.names[,1:(n.var-1)],
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names,
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names,
+col = as.numeric(heart.data.plot$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:(n.var-1)],
+col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names,  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names,  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+dim(heart.factor.names)
+View(heart.factor.names)
+pairs(heart.factor.names,  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:10],  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:12],  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:14],  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:15],  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+pairs(heart.factor.names[,1:15],  col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+n.var <- length(heart.factor.names)
+pairs(heart.factor.names[,1:(n.var-1)],
+col = as.numeric(heart.factor.names$Disease)+1,
+main = "Scaterplot Matrix Colored by Disease")
+n.var <- length(heart.data)
+pairs(heart.data[,1:(n.var-1)], upper.panel=panel.cor, diag.panel=panel.hist,
+main = "Scaterplot Matrix")
+print_kable(var(heart.data[,1:(n.var-1)]), latex_options = 1)
+## 1.4 Loading the Data
+data.file <- paste(data.dir, "clev.csv", sep="/")
+heart.data<-read.csv(data.file, header=TRUE)
+heart.data$Ca <- gsub("?",NA,heart.data$Ca, fixed = TRUE)
+heart.data$Ca<-as.numeric(heart.data$Ca)
+heart.data$Thal<-gsub("?",NA,heart.data$Thal, fixed = TRUE)
+heart.data$Thal<-as.numeric(heart.data$Thal)
+heart.data<-as.data.frame(heart.data)
+summary(heart.data)
+## 1.4 Loading the Data
+data.file <- paste(data.dir, "clev.csv", sep="/")
+heart.data<-read.csv(data.file, header=TRUE)
+heart.data$Ca <- gsub("?",NA,heart.data$Ca, fixed = TRUE)
+heart.data$Ca<-as.numeric(heart.data$Ca)
+heart.data$Thal<-gsub("?",NA,heart.data$Thal, fixed = TRUE)
+heart.data$Thal<-as.numeric(heart.data$Thal)
+heart.data<-as.data.frame(heart.data)
+summary(heart.data)
+## 1.5 Clean the Data
+# We can notice 6 NA's on variables "Ca" and "Thal", let's see those rows
+dim(heart.data)
+(heart.data.na <- subset(heart.data,(is.na(heart.data["Ca"]) | is.na(heart.data["Thal"]))))
+# Number of rows with NAs values
+nrow(heart.data.na)
+# Percentage
+(nrow(heart.data.na)/nrow(heart.data) * 100 )
+# Because is only 2% I suggest to remove those rows
+heart.data <- subset(heart.data, !(is.na(heart.data["Ca"]) | is.na(heart.data["Thal"])))
+#Check the new data
+summary(heart.data)
+str(heart.data)
+dim(heart.data)
+## 1.6 Some Plots
+n.var <- length(heart.data)
+pairs(heart.data[,1:(n.var-1)], upper.panel=panel.cor, diag.panel=panel.hist,
+main = "Scaterplot Matrix")
+print_kable(var(heart.data[,1:(n.var-1)]), latex_options = 1)
+## 1.6 Some Plots
+pairs(heart.data, upper.panel=panel.cor, diag.panel=panel.hist,
+main = "Scaterplot Matrix")
+print_kable(var(heart.data[,1:(n.var-1)]), latex_options = 1)
+g.age <- ggplot(heart.factor.names, aes(x = Age, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+theme(axis.text.x=element_text(angle=90, hjust=1)) +
+ggtitle("Histogram: Age by Disease") + xlab("Age (years)")
+g.age
+## 1.8 Histogram Plots
+# Histogram Age by Disease
+g.age <- ggplot(heart.factor.names, aes(x = Age, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+theme(axis.text.x=element_text(angle=90, hjust=1)) +
+ggtitle("Histogram: Age by Disease") + xlab("Age (years)")
+# Histogram Sex by Disease
+g.sex <- ggplot(heart.factor.names, aes(x = factor(Sex), fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Sex by Disease") + xlab("Sex")
+# Histogram CP by Disease
+g.cp <- ggplot(heart.factor.names, aes(x = CP, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Type of Chest Pain by Disease") +
+xlab("Type of Chest Pain")
+# Histogram TrestBps by Disease
+g.trestbps <- ggplot(heart.factor.names, aes(x = Trestbps, fill = Disease)) +
+geom_histogram(alpha = .8,  bins = 30) +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Resting Blood Pressure by Disease") +
+xlab("Resting Blood Pressure (mm Hg)")
+# Histogram Chol by Disease
+g.chol <- ggplot(heart.factor.names, aes(x = Chol, fill = Disease)) +
+geom_histogram(alpha = .8, bins = 30) +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Serum Cholesterol by Disease") +
+xlab("Serum Cholesterol (mg/dl)")
+# Histogram Fbs by Disease
+g.fbs <- ggplot(heart.factor.names, aes(x = Fbs, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Fasting Blood Sugar by Disease") +
+xlab("Fasting Blood Sugar (mg/dl)")
+# Histogram Restecg by Disease
+g.restegcg <- ggplot(heart.factor.names, aes(x = Restecg, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Resting Electrocardiogram by Disease") +
+xlab("Resting ECG")
+# Histogram Thalach by Disease
+g.thalach <- ggplot(heart.factor.names, aes(x = Thalach, fill = Disease)) +
+geom_histogram(alpha = .8, bins = 30) +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Thalium Test Max Heart Rate by Disease") +
+xlab("Thalium Test Max Heart Rate")
+# Histogram Exang by Disease
+g.exang <- ggplot(heart.factor.names, aes(x = Exang, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Exercise Induced Angina by Disease") +
+xlab("Exercise Induced Angina")
+# Histogram Oldpeak
+g.oldpeak <- ggplot(heart.factor.names, aes(x = Oldpeak, fill = Disease)) +
+geom_histogram(alpha = .8, bins = 30) +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: ST Depression Induced by Exercise") +
+xlab("ST Depression Induced by Exercise")
+# Histogram Slope by Disease
+g.slope <- ggplot(heart.factor.names, aes(x = Slope, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Slope of Peak Exercise ST Segment by Disease") +
+xlab("Slope of Peak Exercise ST Segment")
+# Histogram Ca by Disease
+g.ca <- ggplot(heart.factor.names, aes(x = Ca, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Major Vessels Colored by Fluoroscopy by Disease") +
+xlab("Major Vessels Colored by Fluoroscopy")
+# Histogram Thal by Disease
+g.thal <- ggplot(heart.factor.names, aes(x = Thal, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Thalium Stress Test Results by Disease") +
+xlab("Thalium Stress Test Results")
+# Histogram Num by Disease
+g.num <- ggplot(heart.factor.names, aes(x = Num, fill = Disease)) +
+geom_histogram(alpha = .8, stat = "count") +
+scale_fill_manual(values=c(3, 2)) + theme_bw() +
+ggtitle("Histogram: Major Vessels with > 50% Narrowing by Disease") +
+xlab("Major Vessels with > 50% Narrowing")
+# Plot all the Graphs
+g <- grid.arrange(
+top = text_grob(label = "Histogram of Variables Colored by Disease", color = "blue", size=16 ),
+g.age,
+g.sex,
+g.cp,
+g.trestbps,
+g.chol,
+g.fbs,
+g.restegcg,
+g.thalach,
+g.exang,
+g.oldpeak,
+g.slope,
+g.ca,
+g.thal,
+g.num,
+ncol = 2)
+## 1.9 Mosaic Plots
+mosaicplot(heart.data.plot$Age ~ heart.data.plot$Disease,
+main="Fate by Age", shade=FALSE,color=c(3,2),
+xlab="Age (years)", ylab="Heart disease")
+mosaicplot(heart.data.plot$Sex ~ heart.data.plot$Disease,
+main="Fate by Gender", shade=FALSE,color=c(3,2),
+xlab="Gender", ylab="Heart disease")
+mosaicplot(heart.data.plot$CP ~ heart.data.plot$Disease,
+main="Fate by Chest Pain Type", shade=FALSE,color=c(3,2),
+xlab="Chest Pain Type", ylab="Heart disease")
+mosaicplot(heart.data.plot$Trestbps ~ heart.data.plot$Disease,
+main="Fate by Resting Blood Pressure", shade=FALSE,color=c(3,2),
+xlab="Resting Blood Pressure", ylab="Heart disease")
+mosaicplot(heart.data.plot$Chol ~ heart.data.plot$Disease,
+main="Fate by Serum Cholesterol", shade=FALSE,color=c(3,2),
+xlab="Serum Cholesterol", ylab="Heart disease")
+mosaicplot(heart.data.plot$Fbs ~ heart.data.plot$Disease,
+main="Fate by Fasting Blood Sugar", shade=FALSE,color=c(3,2),
+xlab="Fasting Blood Sugar", ylab="Heart disease")
+mosaicplot(heart.data.plot$Restecg ~ heart.data.plot$Disease,
+main="Fate by Resting Electrocardiogram", shade=FALSE,color=c(3,2),
+xlab="Resting Electrocardiogram", ylab="Heart disease")
+mosaicplot(heart.data.plot$Thalach ~ heart.data.plot$Disease,
+main="Fate by Thalium Test Max Heart Rate", shade=FALSE,color=c(3,2),
+xlab="Thalium Test Max Heart Rate", ylab="Heart disease")
+mosaicplot(heart.data.plot$Exang ~ heart.data.plot$Disease,
+main="Fate by Exercise Induced Angina", shade=FALSE,color=c(3,2),
+xlab="Exercise Induced Angina", ylab="Heart disease")
+mosaicplot(heart.data.plot$Oldpeak ~ heart.data.plot$Disease,
+main="Fate by ST Depression Induced by Exercise", shade=FALSE,color=c(3,2),
+xlab="ST Depression Induced by Exercise", ylab="Heart disease")
+# 2. Split the Dataset into Train and Data
+(n.var <- length(heart.data))
+# The firsts 13 variables are the predictors and the 15 is the class
+inTrainRows <- createDataPartition(heart.data$Num,p=2/3,list=FALSE)
+trainData <- heart.data[inTrainRows,]
+testData <-  heart.data[-inTrainRows,]
+nrow(trainData)/(nrow(testData)+nrow(trainData)) #checking whether really 2/3 -> OK
+# Distribution of each class in the train and test set
+summary(factor(trainData$Num))
+summary(factor(testData$Num))
+X.trainData <- trainData[,1:13]
+X.trainData.std <- f.data.std(X.trainData)
+Y.trainData <- trainData[,15]
+summary(Y.trainData)
+X.testData <- testData[,1:13]
+X.testData.std <- f.data.std(X.testData)
+Y.testData <- testData[,15]
+summary(Y.testData)
+(n.var <- length(heart.data))
+length(heart.data)
+View(heart.data)
+## 1.7 Create a New Variable (Disease)
+# This variable will be used in the analysis
+heart.data$Disease <- ifelse((heart.data$Num != 0),1,0)
+heart.data$Disease <- factor(heart.data$Disease)
+str(heart.data$Disease)
+length(heart.data)
+(n.var <- length(heart.data))
+inTrainRows <- createDataPartition(heart.data$Num,p=2/3,list=FALSE)
+trainData <- heart.data[inTrainRows,]
+trainData.factor <- heart.factor[inTrainRows,]
+trainData.factor.names <- heart.factor.names[inTrainRows,]
+testData <- heart.data[-inTrainRows,]
+testData.factor <- heart.factor[-inTrainRows,]
+testData.factor.names <-  heart.factor.names[-inTrainRows,]
+nrow(trainData)/(nrow(testData)+nrow(trainData)) #checking whether really 2/3 -> OK
+summary(trainData.factor.names$Num)
+summary(testData.factor.names$Num)
+Y.trainData
+X.trainData.factor.names <- trainData.factor.names[,1:13]
+str(X.trainData.factor.names)
+# 2. Split the Dataset into Train and Data
+(n.var <- length(heart.data))
+# The firsts 13 variables are the predictors and the 15 is the class
+inTrainRows <- createDataPartition(heart.data$Num,p=2/3,list=FALSE)
+trainData <- heart.data[inTrainRows,]
+trainData.factor <- heart.factor[inTrainRows,]
+trainData.factor.names <- heart.factor.names[inTrainRows,]
+testData <- heart.data[-inTrainRows,]
+testData.factor <- heart.factor[-inTrainRows,]
+testData.factor.names <-  heart.factor.names[-inTrainRows,]
+nrow(trainData)/(nrow(testData)+nrow(trainData)) #checking whether really 2/3 -> OK
+# Distribution of each class in the train and test set
+summary(trainData.factor.names$Num)
+summary(testData.factor.names$Num)
+X.trainData <- trainData[,1:13]
+X.trainData.factor <- trainData.factor[,1:13]
+X.trainData.factor.names <- trainData.factor.names[,1:13]
+X.trainData.std <- f.data.std(X.trainData)
+Y.trainData <- trainData[,15]
+summary(Y.trainData)
+X.testData <- testData[,1:13]
+X.testData.factor <- testData.factor[,1:13]
+X.testData.factor.names <- testData.factor.names[,1:13]
+X.testData.std <- f.data.std(X.testData)
+Y.testData <- testData[,15]
+summary(Y.testData)
+Y.trainData
+Y.trainData.factor.names <- trainData.factor.names[,15]
+Y.trainData.factor.names
+summary(Y.trainData.factor.names)
+summary(Y.trainData)
+Y.testData.factor.names <- testData.factor.names[,15]
+summary(Y.testData)
+summary(Y.testData.factor.names)
+# 2. Split the Dataset into Train and Data
+(n.var <- length(heart.data))
+# The firsts 13 variables are the predictors and the 15 is the class
+inTrainRows <- createDataPartition(heart.data$Num,p=2/3,list=FALSE)
+trainData <- heart.data[inTrainRows,]
+trainData.factor <- heart.factor[inTrainRows,]
+trainData.factor.names <- heart.factor.names[inTrainRows,]
+testData <- heart.data[-inTrainRows,]
+testData.factor <- heart.factor[-inTrainRows,]
+testData.factor.names <-  heart.factor.names[-inTrainRows,]
+nrow(trainData)/(nrow(testData)+nrow(trainData)) #checking whether really 2/3 -> OK
+# Distribution of each class in the train and test set
+summary(trainData.factor.names$Num)
+summary(testData.factor.names$Num)
+# Create the Train Set
+X.trainData <- trainData[,1:13]
+X.trainData.factor <- trainData.factor[,1:13]
+X.trainData.factor.names <- trainData.factor.names[,1:13]
+X.trainData.std <- f.data.std(X.trainData)
+Y.trainData <- trainData[,15]
+Y.trainData.factor.names <- trainData.factor.names[,15]
+summary(Y.trainData.factor.names)
+# Create the Test Set
+X.testData <- testData[,1:13]
+X.testData.factor <- testData.factor[,1:13]
+X.testData.factor.names <- testData.factor.names[,1:13]
+X.testData.std <- f.data.std(X.testData)
+Y.testData <- testData[,15]
+Y.testData.factor.names <- testData.factor.names[,15]
+summary(Y.testData.factor.names)
+(reg.logistic <- train(Disease ~ Age + Sex + CP + Trestbps + Chol + Fbs + Restecg
++ Thalach + Exang + Oldpeak + Slope + Ca + Thal, data = trainData,
+method = "glm",
+family = "quasibinomial"))
+(reg.logistic <- train(Disease ~ Age + Sex + CP + Trestbps + Chol + Fbs + Restecg
++ Thalach + Exang + Oldpeak + Slope + Ca + Thal, data = trainData.factor,
+method = "glm",
+family = "quasibinomial"))
+(reg.logistic <- train(Disease ~ Age + Sex + CP + Trestbps + Chol + Fbs + Restecg
++ Thalach + Exang + Oldpeak + Slope + Ca + Thal, data = trainData.factor.names,
+method = "glm",
+family = "quasibinomial"))
+(reg.logistic <- train(Disease ~ Age + Sex + CP + Trestbps + Chol + Fbs + Restecg
++ Thalach + Exang + Oldpeak + Slope + Ca + Thal, data = trainData.factor.names,
+method = "glm",
+family = "quasibinomial"))
+reg.logistic
+summary(reg.logistic)
+plot(varImp(reg.logistic), main = "Logistic Regression (Quasibinomial) Variable Importance")
+test_pred_logistic <- predict(reg.logistic, newdata = X.testData.factor.names)
+test_pred_logistic
+res.logistic <- confusionMatrix(test_pred_logistic, Y.testData.factor.names
+)
+res.logistic
+unlink('~/Carleton/Winter 2018/STAT5703 Data Mining I/101066270-FINAL/Report/101066270-FINAL -Enrique-Alex_cache', recursive = TRUE)
