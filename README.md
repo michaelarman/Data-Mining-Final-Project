@@ -1,5 +1,46 @@
 # Data-Mining-Final-Project
-This was a group project for Carleton's Data Mining Course done on Cleveland Heart Disease Data from UCI's Machine Learning repository
+This was a group project for Carleton's Data Mining Course done on Cleveland Heart Disease Data from UCI's Machine Learning repository. 
+
+The main goal of the project is use different Data Mining methodologies in order to attempting to distinguish heart disease presence from absence, based on “Cleveland” Heart Disease Database. 
+The report include the following sections: 
+● Dataset
+● Methodologies Implemented 
+● Main Summary/Interpretation of Findings
+● Main Plots/Details Results 
+The complete R code along with its output is included as an Appendix as a separated file. 
+
+
+ Data Mining Methodologies Implemented 
+ 
+The following include a list of the different Data Mining methodologies implemented in this project: 
+● Data Visualization  
+● Data Cleaning 
+● Data Splitting 
+● Data Preprocessing 
+● Cross-Validation 
+● Mining Association Rules (apriori) 
+● Logistic Regression  
+  ○ Quasibinomial (glm)  
+  ○ Binomial) (glm) 
+  ○ Binomial with Factor Variables (glm)  
+● Linear Model with Stepwise Feature Selection (glmStepAIC)
+● Kmeans Clustering (eclust) 
+  ○ Using Principal Component Analysis (PCA)
+  ○ All Data 
+● Support Vector Machine (SVM) ○ SVM Radial (svmRadial) 
+  ○ Linear SVM (svmLinear)
+● Neural Networks (nnet)  
+● K-Nearest Neighbors (knn) 
+● Random Forest ○ Using Tuning Parameters (rf)
+  ○ Boosted Tree (bstTree)
+  ○ Boost with Tuning Parameters (gbm) 
+  ○ Stochastic Gradient Boost (gbm)  
+● Classification Tree (rpart) 
+● Fast-and-Frugal Decision Trees (FFTrees) 
+● Custom Fast-and-Frugal Decision Trees (FFTrees) 
+● Forest of Fast-and-Frugal Decision Trees (FFForest)
+
+
 
 Data Set Information:
 
