@@ -10,7 +10,7 @@ The report include the following sections:
 The complete R code along with its output is included as an Appendix as a separated file. 
 
 
- ##Data Mining Methodologies Implemented 
+## Data Mining Methodologies Implemented 
  
 The following include a list of the different Data Mining methodologies implemented in this project: 
 * Data Visualization  
@@ -42,7 +42,7 @@ The following include a list of the different Data Mining methodologies implemen
 
 
 
-##Data Set Information:
+## Data Set Information:
 
 This database contains 76 attributes, but all published experiments refer to using a subset of 14 of them. In particular, the Cleveland database is the only one that has been used by ML researchers to 
 this date. The "goal" field refers to the presence of heart disease in the patient. It is integer valued from 0 (no presence) to 4. Experiments with the Cleveland database have concentrated on simply attempting to distinguish presence (values 1,2,3,4) from absence (value 0). 
@@ -54,7 +54,7 @@ One file has been "processed", that one containing the Cleveland database. All f
 To see Test Costs (donated by Peter Turney), please see the folder "Costs"
 
 
-###Attribute Information:
+### Attribute Information:
 
 Only 14 attributes used: 
 1. #3 (age) 
