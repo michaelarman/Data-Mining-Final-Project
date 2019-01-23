@@ -72,7 +72,7 @@ Only 14 attributes used:
 13. #51 (thal) 
 14. #58 (num) (the predicted attribute) 
 
-###Complete attribute documentation: 
+### Complete attribute documentation: 
 1. id: patient identification number 
 2. ccf: social security number (I replaced this with a dummy value of 0) 
 3. age: age in years 
@@ -108,18 +108,18 @@ Only 14 attributes used:
 26. pro (calcium channel blocker used during exercise ECG: 1 = yes; 0 = no) 
 27. diuretic (diuretic used used during exercise ECG: 1 = yes; 0 = no) 
 28. proto: exercise protocol 
-    -1 = Bruce 
-    -2 = Kottus 
-    -3 = McHenry 
-    -4 = fast Balke 
-    -5 = Balke 
-    -6 = Noughton 
-    -7 = bike 150 kpa min/min (Not sure if "kpa min/min" is what was written!) 
-    -8 = bike 125 kpa min/min 
-    -9 = bike 100 kpa min/min 
-   -10 = bike 75 kpa min/min 
-   -11 = bike 50 kpa min/min 
-   -12 = arm ergometer 
+    - 1 = Bruce 
+    - 2 = Kottus 
+    - 3 = McHenry 
+    - 4 = fast Balke 
+    - 5 = Balke 
+    - 6 = Noughton 
+    - 7 = bike 150 kpa min/min (Not sure if "kpa min/min" is what was written!) 
+    - 8 = bike 125 kpa min/min 
+    - 9 = bike 100 kpa min/min 
+   - 10 = bike 75 kpa min/min 
+   - 11 = bike 50 kpa min/min 
+   - 12 = arm ergometer 
 29. thaldur: duration of exercise test in minutes 
 30. thaltime: time when ST measure depression was noted 
 31. met: mets achieved 
@@ -143,10 +143,10 @@ Only 14 attributes used:
 46. exerckm: irrelevant 
 47. restef: rest raidonuclid (sp?) ejection fraction 
 48. restwm: rest wall (sp?) motion abnormality 
-  -0 = none 
-  -1 = mild or moderate 
-  -2 = moderate or severe 
-  -3 = akinesis or dyskmem (sp?) 
+  - 0 = none 
+  - 1 = mild or moderate 
+  - 2 = moderate or severe 
+  - 3 = akinesis or dyskmem (sp?) 
 49. exeref: exercise radinalid (sp?) ejection fraction 
 50. exerwm: exercise wall (sp?) motion 
 51. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
