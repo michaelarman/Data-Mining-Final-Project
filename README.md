@@ -133,9 +133,9 @@ Only 14 attributes used:
 39. xhypo: (1 = yes; 0 = no) 
 40. oldpeak = ST depression induced by exercise relative to rest 
 41. slope: the slope of the peak exercise ST segment 
-   - Value 1: upsloping 
-   - Value 2: flat 
-   - Value 3: downsloping 
+    - Value 1: upsloping 
+    - Value 2: flat 
+    - Value 3: downsloping 
 42. rldv5: height at rest 
 43. rldv5e: height at peak exercise 
 44. ca: number of major vessels (0-3) colored by flourosopy 
@@ -143,10 +143,10 @@ Only 14 attributes used:
 46. exerckm: irrelevant 
 47. restef: rest raidonuclid (sp?) ejection fraction 
 48. restwm: rest wall (sp?) motion abnormality 
-   - 0 = none 
-   - 1 = mild or moderate 
-   - 2 = moderate or severe 
-   - 3 = akinesis or dyskmem (sp?) 
+    - 0 = none 
+    - 1 = mild or moderate 
+    - 2 = moderate or severe 
+    - 3 = akinesis or dyskmem (sp?) 
 49. exeref: exercise radinalid (sp?) ejection fraction 
 50. exerwm: exercise wall (sp?) motion 
 51. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
