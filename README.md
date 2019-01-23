@@ -82,10 +82,10 @@ Only 14 attributes used:
 7. relrest (1 = relieved after rest; 0 = otherwise) 
 8. pncaden (sum of 5, 6, and 7) 
 9. cp: chest pain type 
--- Value 1: typical angina 
--- Value 2: atypical angina 
--- Value 3: non-anginal pain 
--- Value 4: asymptomatic 
+  - Value 1: typical angina 
+  - Value 2: atypical angina 
+  - Value 3: non-anginal pain 
+  - Value 4: asymptomatic 
 10. trestbps: resting blood pressure (in mm Hg on admission to the hospital) 
 11. htn 
 12. chol: serum cholestoral in mg/dl 
@@ -96,9 +96,9 @@ Only 14 attributes used:
 17. dm (1 = history of diabetes; 0 = no such history) 
 18. famhist: family history of coronary artery disease (1 = yes; 0 = no) 
 19. restecg: resting electrocardiographic results 
-    -- Value 0: normal 
-    -- Value 1: having ST-T wave abnormality (T wave inversions and/or ST elevation or depression of > 0.05 mV) 
-    -- Value 2: showing probable or definite left ventricular hypertrophy by Estes' criteria 
+     - Value 0: normal 
+     - Value 1: having ST-T wave abnormality (T wave inversions and/or ST elevation or depression of > 0.05 mV) 
+     - Value 2: showing probable or definite left ventricular hypertrophy by Estes' criteria 
 20. ekgmo (month of exercise ECG reading) 
 21. ekgday(day of exercise ECG reading) 
 22. ekgyr (year of exercise ECG reading) 
