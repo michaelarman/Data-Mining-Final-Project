@@ -82,10 +82,10 @@ Only 14 attributes used:
 7. relrest (1 = relieved after rest; 0 = otherwise) 
 8. pncaden (sum of 5, 6, and 7) 
 9. cp: chest pain type 
-  - Value 1: typical angina 
-  - Value 2: atypical angina 
-  - Value 3: non-anginal pain 
-  - Value 4: asymptomatic 
+   - Value 1: typical angina 
+   - Value 2: atypical angina 
+   - Value 3: non-anginal pain 
+   - Value 4: asymptomatic 
 10. trestbps: resting blood pressure (in mm Hg on admission to the hospital) 
 11. htn 
 12. chol: serum cholestoral in mg/dl 
@@ -117,9 +117,9 @@ Only 14 attributes used:
     - 7 = bike 150 kpa min/min (Not sure if "kpa min/min" is what was written!) 
     - 8 = bike 125 kpa min/min 
     - 9 = bike 100 kpa min/min 
-   - 10 = bike 75 kpa min/min 
-   - 11 = bike 50 kpa min/min 
-   - 12 = arm ergometer 
+    - 10 = bike 75 kpa min/min 
+    - 11 = bike 50 kpa min/min 
+    - 12 = arm ergometer 
 29. thaldur: duration of exercise test in minutes 
 30. thaltime: time when ST measure depression was noted 
 31. met: mets achieved 
@@ -143,10 +143,10 @@ Only 14 attributes used:
 46. exerckm: irrelevant 
 47. restef: rest raidonuclid (sp?) ejection fraction 
 48. restwm: rest wall (sp?) motion abnormality 
-  - 0 = none 
-  - 1 = mild or moderate 
-  - 2 = moderate or severe 
-  - 3 = akinesis or dyskmem (sp?) 
+   - 0 = none 
+   - 1 = mild or moderate 
+   - 2 = moderate or severe 
+   - 3 = akinesis or dyskmem (sp?) 
 49. exeref: exercise radinalid (sp?) ejection fraction 
 50. exerwm: exercise wall (sp?) motion 
 51. thal: 3 = normal; 6 = fixed defect; 7 = reversable defect 
@@ -157,8 +157,8 @@ Only 14 attributes used:
 56. cday: day of cardiac cath (sp?) 
 57. cyr: year of cardiac cath (sp?) 
 58. num: diagnosis of heart disease (angiographic disease status) 
-  - Value 0: < 50% diameter narrowing 
-  - Value 1: > 50% diameter narrowing 
+    - Value 0: < 50% diameter narrowing 
+    - Value 1: > 50% diameter narrowing 
 (in any major vessel: attributes 59 through 68 are vessels) 
 59. lmt 
 60. ladprox 
