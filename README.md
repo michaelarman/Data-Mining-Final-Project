@@ -3,10 +3,10 @@ This was a group project for Carleton's Data Mining Course done on Cleveland Hea
 
 The main goal of the project is use different Data Mining methodologies in order to attempting to distinguish heart disease presence from absence, based on “Cleveland” Heart Disease Database. 
 The report include the following sections: 
-● Dataset
-● Methodologies Implemented 
-● Main Summary/Interpretation of Findings
-● Main Plots/Details Results 
+* Dataset
+* Methodologies Implemented 
+* Main Summary/Interpretation of Findings
+* Main Plots/Details Results 
 The complete R code along with its output is included as an Appendix as a separated file. 
 
 
